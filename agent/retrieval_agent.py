@@ -27,6 +27,7 @@ def create_retrieval_agent(llm, members):
     - DOUBLE CHECK the content you are returning is relevant and accurate.
     - You must only use the provided retriever_tool to search API documentation.
     - The service parameter is always "/electricity-service".
+    - All date/time values must follow ISO 8601 with timezone offset, e.g., "2023-01-01T00:00:00+03:00".
     - The body must be a properly formatted dictionary with all required parameters.
     - Return ONLY valid JSON without any additional text or explanation.
 

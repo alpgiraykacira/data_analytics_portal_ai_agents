@@ -18,6 +18,7 @@ def create_api_agent(llm, members):
         **Constraints:**
         - Only use the provided call_transparency_api tool.
         - Always use "/electricity-service" as the service parameter.
+        - All date/time values must follow ISO 8601 with timezone offset, e.g., "2023-01-01T00:00:00+03:00".
         - Do not change or process the response data.
         - Return data in clean, structured JSON.
 
