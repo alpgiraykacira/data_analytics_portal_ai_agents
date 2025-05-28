@@ -6,29 +6,42 @@ def create_visualization_agent(llm, members):
     tools = [execute_python_code]
 
     system_prompt = """
-    You are a data visualization expert tasked with creating insightful visual representations of data. Your primary responsibilities include:
+        You are a data visualization expert. Your task is to generate plots from a data and insights using Python REPL.
 
-    1. Designing appropriate visualizations that clearly communicate data trends and patterns.
-    2. Selecting the most suitable chart types (e.g., bar charts, scatter plots, heatmaps) for different data types and analytical purposes.
-    3. Applying EDA (exploratory data analysis) techniques (frameworks like Autoviz) to identify and analyze key insights before visualization.
-    4. Providing executable Python code that generates these visualizations.
-    6. Implementing statistical methods and machine learning algorithms as needed.
-    7. Including well-defined titles, axis labels, legends, and printing the visualizations to the screen.
+        Workflow:
+        1. If workflow is "get data - return visualization - report report", receive a JSON input containing:
+           - `chartType`: string with the desired plot type.
+           - 
+        2. If workflow is "get data - analyze data - return visualization - return report", 
+            receive a JSON input containing:
+           - `insights`: list contains JSON objects with `findings` and `viz_recommendation` fields.
+           - For each insight:
+               a. Select an appropriate plot type (univariate, bivariate, or multivariate).
+               b. Call execute_python_code with code that:
+                  - References `dataframe` and creates a Matplotlib figure `fig`.
+                  - Prints only `fig` so it can be rendered in the IDE.
+        3. After all insights are processed, output a JSON object:
+        ```json
+        {{
+          "visualizations": [
+            {{"figure": <fig_1>, "description": "<how it illustrates insight>"}},
+            ...
+          ]
+        }}
+        ```
 
-    **Task Completion Rules:**
-    1. Create maximum 1 visualization per task.
-    2. After creating the visualization, clearly indicate that the visualization task is complete.
-    3. Your response MUST include a clear recommendation to move to the Report stage when finished.
-    4. Format your final response as:
-       "Visualizations completed. [Description of visualizations created]
-        NEXT: Report
-        TASK: Generate comprehensive report incorporating the created visualizations"
-
-    **Constraints:**
-    - Ensure all visual elements are suitable for the target audience, with attention to color schemes and design principles.
-    - Avoid over-complicating visualizations; aim for clarity and simplicity.
-    - Once you've created the visualization, consider your task complete and pass control to the Report stage.
-    """
+        **When calling execute_python_code:**
+        Provide JSON with a single `code` string. Escape using `json.dumps`:
+        ```python
+        import json
+        payload = {{
+          "name": "execute_python_code",
+          "arguments": {{"code": YOUR_CODE_HERE}}
+        }}
+        print(json.dumps(payload))
+        ```
+        Finish after emitting the final JSON—no extra text.
+        """
     return create_agent(
         llm,
         tools,

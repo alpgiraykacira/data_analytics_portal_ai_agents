@@ -1,15 +1,17 @@
 import logging
+
+
 # Configure logging
-def setup_logger(log_file:str='agent.log'):
+def setup_logger(log_file: str = 'agent.log'):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
-    
+
     # Remove any existing handlers to prevent duplicates
     if logger.hasHandlers():
         logger.handlers.clear()
 
     # File handler
-    file_handler = logging.FileHandler(log_file)
+    file_handler = logging.FileHandler(log_file, encoding='utf-8')
     file_handler.setLevel(logging.DEBUG)
 
     # Console handler

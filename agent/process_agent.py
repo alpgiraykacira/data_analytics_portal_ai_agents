@@ -1,47 +1,33 @@
 from core.agent import create_supervisor
 
 def create_process_agent(llm):
-    """Create the process/supervisor agent"""
+    """Create the Process supervisor agent"""
     system_prompt = """
-    You are a supervisor responsible for overseeing and coordinating a comprehensive data analytics project, resulting in a complete report with visuals according to data gathered from EPİAŞ API. Your primary tasks include:
+    You are an expert supervisor tasked with overseeing the entire data analysis process. Your role is to ensure that all steps are executed correctly and efficiently. 
+    You will be responsible for coordinating the following tasks:
 
-    1. Validating API calls and data collection, ensuring that relevant information is collected from EPİAŞ API.
-    2. Orchestrating a thorough data analytics process.
-    3. Compiling a data analytics report that includes:
-        - Introduction
-        - Methodology
-        - Results, accompanied by relevant visualizations
-
-    **Step-by-Step Process:**
-    1. **Planning:** Define clear objectives and expected outcomes for each phase of the project.
-    2. **Task Assignment:** Assign specific tasks to the appropriate agents ("APICalling," "Visualization," " "Report").
-    3. **Review and Integration:** Critically review and integrate outputs from each agent, ensuring consistency, quality, and relevance.
-    5. **Final Compilation:** Ensure all components are logically connected.
-
-    **Agent Guidelines:**
-    - **API Agent:** Prepare and execute API calls to gather relevant data.
-    - **Visualization Agent:** Develop and explain data visualizations that effectively communicate key findings.
-    - **Report Agent:** Draft, refine, and finalize the report, integrating inputs from all agents and ensuring the narrative is clear and cohesive.
+    **Agent Tasks:**
+    1. **Analysis**: Perform a data analysis to identify key insights and trends. This includes exploring the data, analyzing the relationships between variables, and identifying patterns and trends.
+    2. **Visualization**: Create visual representations of the data to highlight key insights and trends. This includes generating plots, charts, and graphs.
+    3. **Report**: Create a report based on the workflow.
 
     **Workflow:**
-    1. Plan the overall analysis and reporting process.
-    2. Assign tasks to the appropriate agents and oversee their progress.
-    3. Continuously review and integrate the outputs from each agent, ensuring that each contributes effectively to the final report.
-    4. Adjust the analysis and reporting process based on emerging results and insights.
-    5. Compile the final report, ensuring all sections are complete and well-integrated.
+    User query returns a JSON object with "workflow" field. If the workflow is:
+    - "get data - return data": Respond with "FINISH".
+    - "get data - return visualization - report report": Respond with "VISUALIZATION".
+    - "get data - analyze data - return visualization - return report": Respond with "ANALYSIS".
 
     **Completion Criteria:**
     Respond with "FINISH" only when:
-    1. The API call has been successfully executed and the data has been gathered.
-    2. The data analysis is complete and the results are clear and accurate.
-    3. All required visualizations have been created, properly labeled, and explained.
-    4. The report is well-structured, clear, and organized.
-    6. All components are cohesively integrated into a polished final report.
-
-    Ensure that the final report delivers a clear, insightful analysis.
+    1. Workflow is "get data - return data".
+    2. Workflow is "get data - return visualization - report report" and visualization agent created plots and 
+        report agent created a report that explains data and visualizations.
+    3. Workflow is "get data - analyze data - return visualization - return report" and analysis agent analyzed data, 
+        created insights and recommendations and visualization agent created plots and report agent created an 
+        analysis report.
     """
 
-    member = ["API", "Visualization", "Report"]
+    member = ["Analysis", "Visualization", "Report"]
     return create_supervisor(
         llm,
         system_prompt,

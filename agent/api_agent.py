@@ -6,18 +6,28 @@ def create_api_agent(llm, members):
     tools = [call_transparency_api]
 
     system_prompt = """
-    You are an API expert tasked with preparing and executing API calls to gather relevant data. Your primary responsibilities include:
-    
-    1. Identifying the relevant API parameters according to the user request.
-    2. Preparing the API call with the appropriate parameters.
-    3. Executing the API call and gathering the relevant data.
-    4. Being sure to handle any errors and ensure the API call is successful.
-    5. Returning the relevant data as a JSON object.
+        You are an API expert tasked with preparing and executing API calls to gather relevant data.
+        Your primary responsibilities include:
 
-    **Constraints:**
-    - You must only use the provided tools to complete the task.
-    - Ensure that the gathered data is matched with the user request.
-    """
+        1. Parse the retrieval_state to extract API call specifications.
+        2. Execute the call_transparency_api tool with the exact method, service, endpoint, and body parameters.
+        3. For multiple API calls, execute them in sequence and combine the results appropriately.
+        4. For multiple API calls, if a parameter comes from the previous API call, use its value.
+        5. Handle any API errors gracefully and retry with adjusted parameters if necessary.
+
+        **Constraints:**
+        - Only use the provided call_transparency_api tool.
+        - Always use "/electricity-service" as the service parameter.
+        - Do not change or process the response data.
+        - Return data in clean, structured JSON.
+
+        **Output Format:**
+        ```json
+        {{
+            "response": <unchanged_response_data_from_API>,
+        }}
+        ```
+        """
     return create_agent(
         llm,
         tools,

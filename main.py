@@ -20,14 +20,18 @@ class DataAnalyticsPortal:
         events = graph.stream(
             {
                 "messages": [HumanMessage(content=user_input)],
+                "process_state": "",
                 "process_decision": "",
-                "process": "",
+                "query_state": "",
+                "retrieval_state": "",
                 "api_state": "",
+                "preprocessing_state": "",
+                "exploration_state": "",
                 "visualization_state": "",
-                "report_section": "",
-                "last_sender": "",
+                "report_state": "",
+                "sender": "",
             },
-            {"configurable": {"thread_id": "1"}, "recursion_limit": 20},
+            {"configurable": {"thread_id": "1"}, "recursion_limit": 30},
             stream_mode="values",
             debug=False
         )
@@ -44,15 +48,7 @@ def main():
     system = DataAnalyticsPortal()
 
     user_input = '''
-    Make an API call with following parameters:
-        - method="POST",
-        - service="electricity-service",
-        - endpoint="/v1/markets/dam/data/mcp",
-        - body={
-            "startDate": "2024-01-01T00:00:00+03:00",
-            "endDate": "2024-01-02T00:00:00+03:00"
-}
-    Use machine learning to perform data analysis and write complete graphical reports
+    Intent: "EDA". 2025 yılı Mayıs ayının ilk 2 günü her saat için piyasa takas fiyatının (TRY) 3000+ olma durumunu inceleyeceğim. 0-23 arası her bir saatte kaç tane 3000+ fiyat varsa bunu bir grafik şeklinde göster.
     '''
     system.run(user_input)
 

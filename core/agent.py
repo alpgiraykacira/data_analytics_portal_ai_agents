@@ -55,7 +55,10 @@ def create_agent(
         MessagesPlaceholder(variable_name="messages"),
         ("ai", "process_state: {process_state}"),
         ("ai", "process_decision: {process_decision}"),
+        ("ai", "query_state: {query_state}"),
+        ("ai", "retrieval_state: {retrieval_state}"),
         ("ai", "api_state: {api_state}"),
+        ("ai", "analysis_state: {analysis_state}"),
         ("ai", "visualization_state: {visualization_state}"),
         ("ai", "report_state: {report_state}"),
         MessagesPlaceholder(variable_name="agent_scratchpad"),
@@ -67,7 +70,7 @@ def create_agent(
     logger.info("Agent created successfully")
 
     # Return an executor to manage the agent's task execution
-    return AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=False)
+    return AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=False, handle_parsing_errors=True)
 
 
 def create_supervisor(llm: ChatOpenAI, system_prompt: str, members: list[str]) -> AgentExecutor:

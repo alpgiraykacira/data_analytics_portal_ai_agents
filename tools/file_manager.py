@@ -1,5 +1,9 @@
 from typing import Annotated
 from langchain.tools import tool
+from PIL import Image
+from logger import setup_logger
+
+logger = setup_logger()
 
 @tool
 def read_file(file_path: Annotated[str, "./ by default"]) -> str:
@@ -41,3 +45,17 @@ def write_file(file_path: Annotated[str, "./ by default"], content: Annotated[st
         return f"Error: File {file_path} not found."
     except Exception as e:
         return f"Error writing file: {str(e)}"
+
+@tool
+def save_image(
+    image: Annotated[Image.Image, "PIL Image object"],
+    file_path: Annotated[str, "Local file path"]
+) -> str:
+    """
+    Saves a PIL Image to the specified local path and returns the path.
+    """
+    try:
+        image.save(file_path)
+        return f"Image saved to {file_path}"
+    except Exception as e:
+        return f"Error saving image: {e}"

@@ -1,7 +1,7 @@
 import requests
 import dotenv
 import os
-from langchain_core.tools import tool
+from langchain.tools import tool
 from logger import setup_logger
 from typing import Dict, Annotated
 
@@ -53,7 +53,7 @@ def call_transparency_api(
         "TGT": tgt
     }
     try:
-        logger.info(f"Calling EPIAS API: {url}")
+        logger.info(f"Calling EPIAS API with method: {method}, endpoint: {url}, body: {body}")
         response = requests.request(method, url, headers=headers, json=body)
         logger.info(f"API call completed with status code: {response.status_code}")
         return response.json()

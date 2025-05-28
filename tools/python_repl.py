@@ -1,29 +1,39 @@
-from typing import Annotated
-from langchain_core.tools import tool
 from logger import setup_logger
+from typing import Annotated, Dict
+from langchain.tools import tool
 from langchain_experimental.utilities import PythonREPL
 
+# Set up a logger
 logger = setup_logger()
-
+# Initialize REPL with pre-imported libraries
 repl = PythonREPL()
+# Seed common libraries into the REPL namespace
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+repl.globals.update({
+    "pd": pd,
+    "np": np,
+    "plt": plt
+})
 
 @tool
-def execute_python_code(code: Annotated[str, "Python code to execute"]):
+def execute_python_code(
+    code: Annotated[str, "Python code to execute in REPL"]
+) -> Annotated[Dict[str, object], "Execution result with stdout, stderr, and success flag"]:
     """
-    Executes Python code passed as a string and prints its output.
+    Executes Python code in a REPL environment and returns structured results.
 
-    The function takes a string containing Python code and attempts to execute
-    it using a REPL (Read-Eval-Print Loop) interface. It logs the process,
-    including the input code, the result of execution, or any errors that occur.
-
-    Args:
-        code (str): Python code to execute.
+    Returns a dict with:
+    - success: bool indicating if execution succeeded
+    - stdout: standard output from the code
+    - stderr: error message if an exception occurred
     """
     try:
-        logger.info(f"Executing Python code: {code}")
-        result = repl.run(code)
+        # Run the code and capture stdout
+        stdout = repl.run(code)
+        return {"success": True, "stdout": stdout, "stderr": ""}
     except Exception as e:
-        logger.error(f"Error executing Python code: {str(e)}")
-        return {"error": str(e)}
-    result_str = f"Successfully executed Python code.\nStdout:\n{result}"
-    return result_str
+        # Log error and return structured error
+        logger.error(f"Error in execute_python_code: {e}", exc_info=True)
+        return {"success": False, "stdout": "", "stderr": str(e)}
