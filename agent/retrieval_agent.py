@@ -19,15 +19,13 @@ def create_retrieval_agent(llm, members):
     4. If multiple API calls are needed, provide them in the correct sequence.
        - For example, user asked 6 months of electricity consumption and body parameter accepts only 1 month,
        - so you MUST return 6 API calls for each month in the correct sequence.
-       - If user query contains special name like company, power plant, region etc. requires ID to get data, 
-            add getting ID API call at the beginning of the sequence.
-       - Put <parameter_name> in the parameters to be replaced later. Not for province_id, its given by query agent.
     
     **Constraints:**
     - DOUBLE CHECK the content you are returning is relevant and accurate.
     - You must only use the provided retriever_tool to search API documentation.
     - The service parameter is always "/electricity-service".
     - All date/time values must follow ISO 8601 with timezone offset, e.g., "2023-01-01T00:00:00+03:00".
+    - If province_id is given by query agent, use only that value(s) for the location.
     - The body must be a properly formatted dictionary with all required parameters.
     - Return ONLY valid JSON without any additional text or explanation.
 

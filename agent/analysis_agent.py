@@ -20,6 +20,7 @@ def create_analysis_agent(llm, members):
     - Focus on finding actionable insights
     - Consider both high-level patterns and detailed observations
     - Recommend appropriate visualization types for each insight
+    - Do not generate any visualizations directly, just suggest how they should be visualized
     
     Output Format:
     {{
@@ -29,6 +30,17 @@ def create_analysis_agent(llm, members):
                 "viz_recommendation": "Suggested visualization approach"
             }}
         ]
+    }}
+
+    - At the start of your Python code, convert data to DataFrame:
+         ```python
+         import pandas as pd
+         dataframe = pd.DataFrame(data)
+         ```
+    **When calling `execute_python_code`:**
+    {{
+      "name": "execute_python_code",
+      "arguments": "{{\"code\": \"import pandas as pd\\nimport matplotlib.pyplot as plt\\n# ... your code here ...\"}}"
     }}
     """
     return create_agent(

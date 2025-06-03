@@ -1,0 +1,74 @@
+[
+  {
+    "type": "HumanMessage",
+    "value": {
+      "content": "\n    What was the hourly market cap price for the 1st of January 2025?\n    ",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "human",
+      "name": null,
+      "id": null,
+      "example": false
+    }
+  },
+  {
+    "type": "AIMessage",
+    "value": {
+      "content": "{\n  \"intent\": \"get data - return data\",\n  \"parameters\": {\n    \"startDate\": \"2025-01-01T00:00:00+03:00\",\n    \"endDate\": \"2025-01-01T23:00:00+03:00\",\n    \"dataTypes\": [\"market cap price\", \"MCP\"],\n    \"workflow\": \"get data - return data\",\n    \"operationType\": null,\n    \"chartType\": null\n  }\n}",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "ai",
+      "name": "query_agent",
+      "id": null,
+      "example": false,
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": null
+    }
+  },
+  {
+    "type": "AIMessage",
+    "value": {
+      "content": "{\n  \"api_calls\": [\n    {\n      \"method\": \"POST\",\n      \"service\": \"/electricity-service\",\n      \"endpoint\": \"/v1/markets/dam/data/mcp\",\n      \"body\": {\n        \"startDate\": \"2025-01-01T00:00:00+03:00\",\n        \"endDate\": \"2025-01-01T23:00:00+03:00\"\n      }\n    }\n  ]\n}",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "ai",
+      "name": "retrieval_agent",
+      "id": null,
+      "example": false,
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": null
+    }
+  },
+  {
+    "type": "AIMessage",
+    "value": {
+      "content": "```json\n{\n    \"response\": {\n        \"items\": [\n            {\n                \"date\": \"2025-01-01T00:00:00+03:00\",\n                \"hour\": \"00:00\",\n                \"price\": 2494,\n                \"priceUsd\": 70.81,\n                \"priceEur\": 67.88\n            },\n            {\n                \"date\": \"2025-01-01T01:00:00+03:00\",\n                \"hour\": \"01:00\",\n                \"price\": 1799.98,\n                \"priceUsd\": 51.1,\n                \"priceEur\": 48.99\n            },\n            {\n                \"date\": \"2025-01-01T02:00:00+03:00\",\n                \"hour\": \"02:00\",\n                \"price\": 1692.99,\n                \"priceUsd\": 48.06,\n                \"priceEur\": 46.08\n            },\n            {\n                \"date\": \"2025-01-01T03:00:00+03:00\",\n                \"hour\": \"03:00\",\n                \"price\": 2244.99,\n                \"priceUsd\": 63.74,\n                \"priceEur\": 61.1\n            },\n            {\n                \"date\": \"2025-01-01T04:00:00+03:00\",\n                \"hour\": \"04:00\",\n                \"price\": 2400.01,\n                \"priceUsd\": 68.14,\n                \"priceEur\": 65.32\n            },\n            {\n                \"date\": \"2025-01-01T05:00:00+03:00\",\n                \"hour\": \"05:00\",\n                \"price\": 2680,\n                \"priceUsd\": 76.09,\n                \"priceEur\": 72.94\n            },\n            {\n                \"date\": \"2025-01-01T06:00:00+03:00\",\n                \"hour\": \"06:00\",\n                \"price\": 2989.99,\n                \"priceUsd\": 84.89,\n                \"priceEur\": 81.38\n            },\n            {\n                \"date\": \"2025-01-01T07:00:00+03:00\",\n                \"hour\": \"07:00\",\n                \"price\": 2979.99,\n                \"priceUsd\": 84.6,\n                \"priceEur\": 81.1\n            },\n            {\n                \"date\": \"2025-01-01T08:00:00+03:00\",\n                \"hour\": \"08:00\",\n                \"price\": 3000,\n                \"priceUsd\": 85.17,\n                \"priceEur\": 81.65\n            },\n            {\n                \"date\": \"2025-01-01T09:00:00+03:00\",\n                \"hour\": \"09:00\",\n                \"price\": 2600.01,\n                \"priceUsd\": 73.82,\n                \"priceEur\": 70.76\n            },\n            {\n                \"date\": \"2025-01-01T10:00:00+03:00\",\n                \"hour\": \"10:00\",\n                \"price\": 1350,\n                \"priceUsd\": 38.33,\n                \"priceEur\": 36.74\n            },\n            {\n                \"date\": \"2025-01-01T11:00:00+03:00\",\n                \"hour\": \"11:00\",\n                \"price\": 1799.98,\n                \"priceUsd\": 51.1,\n                \"priceEur\": 48.99\n            },\n            {\n                \"date\": \"2025-01-01T12:00:00+03:00\",\n                \"hour\": \"12:00\",\n                \"price\": 1000,\n                \"priceUsd\": 28.39,\n                \"priceEur\": 27.22\n            },\n            {\n                \"date\": \"2025-01-01T13:00:00+03:00\",\n                \"hour\": \"13:00\",\n                \"price\": 1512.63,\n                \"priceUsd\": 42.94,\n                \"priceEur\": 41.17\n            },\n            {\n                \"date\": \"2025-01-01T14:00:00+03:00\",\n                \"hour\": \"14:00\",\n                \"price\": 2005.01,\n                \"priceUsd\": 56.92,\n                \"priceEur\": 54.57\n            },\n            {\n                \"date\": \"2025-01-01T15:00:00+03:00\",\n                \"hour\": \"15:00\",\n                \"price\": 2283.04,\n                \"priceUsd\": 64.82,\n                \"priceEur\": 62.14\n            },\n            {\n                \"date\": \"2025-01-01T16:00:00+03:00\",\n                \"hour\": \"16:00\",\n                \"price\": 3000,\n                \"priceUsd\": 85.17,\n                \"priceEur\": 81.65\n            },\n            {\n                \"date\": \"2025-01-01T17:00:00+03:00\",\n                \"hour\": \"17:00\",\n                \"price\": 3000,\n                \"priceUsd\": 85.17,\n                \"priceEur\": 81.65\n            },\n            {\n                \"date\": \"2025-01-01T18:00:00+03:00\",\n                \"hour\": \"18:00\",\n                \"price\": 3000,\n                \"priceUsd\": 85.17,\n                \"priceEur\": 81.65\n            },\n            {\n                \"date\": \"2025-01-01T19:00:00+03:00\",\n                \"hour\": \"19:00\",\n                \"price\": 3000,\n                \"priceUsd\": 85.17,\n                \"priceEur\": 81.65\n            },\n            {\n                \"date\": \"2025-01-01T20:00:00+03:00\",\n                \"hour\": \"20:00\",\n                \"price\": 3000,\n                \"priceUsd\": 85.17,\n                \"priceEur\": 81.65\n            },\n            {\n                \"date\": \"2025-01-01T21:00:00+03:00\",\n                \"hour\": \"21:00\",\n                \"price\": 3000,\n                \"priceUsd\": 85.17,\n                \"priceEur\": 81.65\n            },\n            {\n                \"date\": \"2025-01-01T22:00:00+03:00\",\n                \"hour\": \"22:00\",\n                \"price\": 2399.99,\n                \"priceUsd\": 68.14,\n                \"priceEur\": 65.32\n            },\n            {\n                \"date\": \"2025-01-01T23:00:00+03:00\",\n                \"hour\": \"23:00\",\n                \"price\": 2274,\n                \"priceUsd\": 64.56,\n                \"priceEur\": 61.89\n            }\n        ],\n        \"page\": null,\n        \"statistic\": {\n            \"priceAvg\": 2396.11,\n            \"priceUsdAvg\": 68.03,\n            \"priceEurAvg\": 65.21,\n            \"priceMax\": 3000,\n            \"priceUsdMax\": 85.17,\n            \"priceEurMax\": 81.65,\n            \"priceMin\": 1000,\n            \"priceUsdMin\": 28.39,\n            \"priceEurMin\": 27.22,\n            \"priceTotal\": 57506.61,\n            \"priceUsdTotal\": 1632.64,\n            \"priceEurTotal\": 1565.14,\n            \"ptfWeightedAvg\": 2412.63,\n            \"ptfUsdWeightedAvg\": 68.5,\n            \"ptfEurWeightedAvg\": 65.66\n        }\n    }\n}\n```",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "ai",
+      "name": "api_agent",
+      "id": null,
+      "example": false,
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": null
+    }
+  },
+  {
+    "type": "AIMessage",
+    "value": {
+      "content": "{'next': 'FINISH', 'task': 'The workflow is get data - return data. The process is complete and should be finished.'}",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "ai",
+      "name": "process_agent",
+      "id": null,
+      "example": false,
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": null
+    }
+  }
+]

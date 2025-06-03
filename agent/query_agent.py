@@ -15,17 +15,16 @@ def create_query_agent(llm, members):
             1. "get data - return data", when user only asks for data
             2. "get data - return visualization - report report", when user asks for data and 
                 "operation" which can be visualized or states what kind of "chart" is needed
-            3. QUERY MUST STATE ANALYZE IN ORDER TO SELECT THIS WORKFLOW!
-                "get data - analyze data - return visualization - return report", when asks for analysis
+            3. "get data - analyze data - return visualization - return report", when user asks for analysis,
+                query contains "analysis" or equivalent meaning words.
 
     2. **Extract Parameters**:
        - **Dates**: Identify the appropriate date keys based on granularity:
-         - Use "startDate" and "endDate" for daily or hourly ranges.
-         - Use "datePeriod" for monthly or yearly data.
-         All date/time values must follow ISO 8601 with timezone offset, e.g., "2023-01-01T00:00:00+03:00".
+         - Use "startDate" and "endDate" ONLY for "daily" or "hourly" ranges.
+         - Use "datePeriod" ONLY for "monthly" or "yearly" data.
+            If user mean multiple months, provide multiple "datePeriod" values for each month.
+         - All date/time values must follow ISO 8601 with timezone offset, e.g., "2023-01-01T00:00:00+03:00".
        - **Location**: Detect province names and obtain its numeric ID via the resolve_province_id tool.
-       - **Special Names**: If the user requests a data about a company, a power plant, a region, etc., 
-                            add a note that extra API calls will be required to receive IDs of those entities.
        - **Data Types**: Recognize terms like consumption, generation, MCP, SMP, imbalance, fill rate, etc.
        - **Analysis Types**: Capture operations such as trend, comparison, distribution, difference, or ratio.
        - **Charting**: If the user requests a visualization specify a "chartType" ("line", "bar", etc.).
@@ -40,8 +39,7 @@ def create_query_agent(llm, members):
         "startDate": "YYYY-MM-DDT00:00:00+03:00",
         "endDate": "YYYY-MM-DDT00:00:00+03:00",
         "datePeriod": "YYYY-MM-DDT00:00:00+03:00",
-        "province_id": <integer, if applicable>,
-        "specialName": <string, if applicable>,
+        "province_id": <integer>,
         "dataTypes": [<list of strings>],
         "workflow": <"get data - return data"|"get data - return visualization - return report"|"get data - make analysis - return visualization - return report">,
         "operationType": <string, if applicable|null>,
@@ -49,6 +47,7 @@ def create_query_agent(llm, members):
       }}
     }}
     ```
+    Use provided tool `resolve_province_id` to convert province names into numeric IDs.
     Do not include any extra text, explanation, or comments outside the JSON.
     """
     return create_agent(

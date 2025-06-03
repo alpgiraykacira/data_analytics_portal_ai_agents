@@ -20,20 +20,12 @@ repl.globals.update({
 @tool
 def execute_python_code(
     code: Annotated[str, "Python code to execute in REPL"]
-) -> Annotated[Dict[str, object], "Execution result with stdout, stderr, and success flag"]:
+) -> Annotated[str, "Execution result or error message"]:
     """
     Executes Python code in a REPL environment and returns structured results.
 
-    Returns a dict with:
-    - success: bool indicating if execution succeeded
-    - stdout: standard output from the code
-    - stderr: error message if an exception occurred
+    Returns result string:
+        result: str
     """
-    try:
-        # Run the code and capture stdout
-        stdout = repl.run(code)
-        return {"success": True, "stdout": stdout, "stderr": ""}
-    except Exception as e:
-        # Log error and return structured error
-        logger.error(f"Error in execute_python_code: {e}", exc_info=True)
-        return {"success": False, "stdout": "", "stderr": str(e)}
+    result = repl.run(code)
+    return result

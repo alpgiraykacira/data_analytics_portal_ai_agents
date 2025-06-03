@@ -4,6 +4,7 @@ import os
 from langchain.tools import tool
 from logger import setup_logger
 from typing import Dict, Annotated
+import json
 
 logger = setup_logger()
 
@@ -28,23 +29,13 @@ def call_transparency_api(
         service: Annotated[str, "This is always '/electricity-service'"],
         endpoint: Annotated[str, "Specify the full endpoint e.g., '/v1/markets/dam/data/mcp'"],
         body: Annotated[dict, "JSON body containing parameters"]
-) -> Dict:
+) -> str:
     """
-    Calls the EPIAS Transparency API to fetch data using the specified HTTP method, service,
-    endpoint, and request body. This function manages token retrieval and constructs the request
-    with the necessary headers.
-
-    Args:
-        method: HTTP method e.g., GET or POST.
-        service: This is always '/electricity-service'.
-        endpoint: Specify the full endpoint e.g., '/v1/markets/dam/data/mcp'.
-        body: JSON body containing parameters.
-
-    Returns:
-        dict: The JSON response from the API.
+    Calls the EPIAS Transparency API and returns the JSON response
+    as a compact string (no spaces, no unnecessary escapes).
     """
     tgt = get_token(username, password)
-    host = "https://seffaflik.epias.com.tr/"
+    host = "https://seffaflik.epias.com.tr"
     url = host + service + endpoint
     headers = {
         "Accept-Language": "en",
@@ -53,10 +44,16 @@ def call_transparency_api(
         "TGT": tgt
     }
     try:
-        logger.info(f"Calling EPIAS API with method: {method}, endpoint: {url}, body: {body}")
+        logger.info(f"Calling EPIAS API: {method} {url} with body={body}")
         response = requests.request(method, url, headers=headers, json=body)
-        logger.info(f"API call completed with status code: {response.status_code}")
-        return response.json()
+        response.raise_for_status()
+        data = response.json()
+        # Serialize without spaces or newlines
+        compact_json = json.dumps(data, separators=(',', ':'), ensure_ascii=False)
+        logger.info(f"API call successful, returning compact JSON: {compact_json}")
+        return compact_json
+
     except Exception as e:
-        logger.error(f"Error calling EPIAS API: {str(e)}")
-        return {"error": str(e)}
+        logger.error(f"Error calling EPIAS API: {e}")
+        # Return the error as a compact JSON too
+        return json.dumps({"error": str(e)}, separators=(',', ':'), ensure_ascii=False)

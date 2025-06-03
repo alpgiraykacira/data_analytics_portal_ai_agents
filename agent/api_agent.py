@@ -14,19 +14,24 @@ def create_api_agent(llm, members):
         3. For multiple API calls, execute them in sequence and combine the results appropriately.
         4. For multiple API calls, if a parameter comes from the previous API call, use its value.
         5. Handle any API errors gracefully and retry with adjusted parameters if necessary.
+        6. ONLY return the response data from the API call(s). Do not include any additional text or explanation.
 
         **Constraints:**
         - Only use the provided call_transparency_api tool.
         - Always use "/electricity-service" as the service parameter.
         - All date/time values must follow ISO 8601 with timezone offset, e.g., "2023-01-01T00:00:00+03:00".
+        - If the API request fails, try again until it succeeds.
+        - Check the response data for relevance and completeness.
         - Do not change or process the response data.
         - Return data in clean, structured JSON.
 
         **Output Format:**
-        ```json
-        {{
-            "response": <unchanged_response_data_from_API>,
-        }}
+        ```
+        compact_json: {{<unchanged_response_data_from_API>}},
+        ```
+        **Example:**
+        ```
+        compact_json: {{"items":[{{"date":"2025-03-10T00:00:00+03:00","hour":"00:00","total":34152.78,"naturalGas":9924.12,...}}]}}
         ```
         """
     return create_agent(
