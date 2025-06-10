@@ -14,8 +14,8 @@ class DataAnalyticsPortal:
             llms=self.llm.get_models(),
         )
 
-    def run(self, user_input: str) -> None:
-        """Run the system with user input"""
+    def run(self, user_input: str):
+        """Run the system with user input and return messages."""
         graph = self.workflow.get_graph()
         events = graph.stream(
             {
@@ -35,12 +35,16 @@ class DataAnalyticsPortal:
             debug=False
         )
 
+        responses = []
         for event in events:
             message = event["messages"][-1]
-            if isinstance(message, tuple):
-                print(message, end='', flush=True)
-            else:
-                message.pretty_print()
+            responses.append({
+                "type": type(message).__name__,
+                "content": getattr(message, "content", None),
+                "name": getattr(message, "name", None)
+            })
+
+        return responses
 
 
 def main():
@@ -49,7 +53,9 @@ def main():
     user_input = '''
     Intent: "EDA". 2025 yılı Mayıs ayının ilk 2 günü her saat için piyasa takas fiyatının (TRY) 3000+ olma durumunu inceleyeceğim. 0-23 arası her bir saatte kaç tane 3000+ fiyat varsa bunu bir grafik şeklinde göster.
     '''
-    system.run(user_input)
+    responses = system.run(user_input)
+    for msg in responses:
+        print(msg.get("content"))
 
 
 if __name__ == "__main__":
