@@ -16,7 +16,9 @@ from components.ChatBox import ChatBox
 from components.InputBox import InputBox
 
 #Custom Imports
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..')))
+from main import DataAnalyticsPortal
+portal = DataAnalyticsPortal()
 dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
 _dash_renderer._set_react_version("18.2.0")
 
@@ -29,7 +31,6 @@ app.layout = dmc.MantineProvider(
     theme={"fontFamily": 'Montserrat',},
     children = [
         dcc.Store(id='chat-history', data=[]),
-        dcc.Interval(id='check-messages', interval=1000, n_intervals=0,disabled=True),
         html.Div(
             children = [
                 dmc.Grid(
@@ -55,7 +56,6 @@ app.layout = dmc.MantineProvider(
 @app.callback(
     Output('chat-history', 'data', allow_duplicate=True),
     Output('input-msg', 'value'),
-    Output('check-messages', 'disabled'),
     Input('send-btn', 'n_clicks'),
     State('input-msg', 'value'),
     State('chat-history', 'data'),
@@ -63,49 +63,29 @@ app.layout = dmc.MantineProvider(
 )
 def update_history(n, new_msg, history):
     if not new_msg:
-        return history
-    # Kullanıcı mesajı
-    history = [{'sender': 'user', 'text': new_msg,'type':'string'}] + history
-    return history,"", False
+        return history, ""
 
-@app.callback(
-    Output('chat-history', 'data'),
-    Input('check-messages', 'n_intervals'),
-    State('chat-history', 'data')
-)
+    history = [{'sender': 'user', 'text': new_msg, 'type': 'string'}] + history
 
-def check_messages(n_intervals, history):
-    if n_intervals:
-        try:
-            with open('chat_fe/src/messages.json', 'r') as f:
-                messages = json.load(f)
-        except:
-            messages = []
+    responses = portal.run(new_msg)
+    for msg in responses:
+        if msg.get('name') == 'api_agent':
+            chat_msg = {'sender': 'agent', 'text': msg.get('content'), 'type': 'data'}
+            history = [chat_msg] + history
+        elif msg.get('name') == 'process_agent':
+            msg_text = msg.get('content', '')
+            msg_text = msg_text.replace("'", '"')
+            msg_text = re.sub(r'(\w+):', r'"\1":', msg_text)
+            try:
+                msg_json = json.loads(msg_text)
+                chat_msg = {'sender': 'agent', 'text': msg_json.get('task', ''), 'type': 'string'}
+                history = [chat_msg] + history
+            except json.JSONDecodeError:
+                pass
 
-        for msg in messages:
-            if msg["type"] == "AIMessage":
-                if msg["value"]["name"] == "api_agent":
-                    # if message is not in history
-                    chat_msg = [{'sender': 'agent', 'text': msg["value"]["content"],'type':'data'}]
-                    #if chat_msg  is not added to history
-                    if chat_msg[0] not in history:
-                        history = chat_msg + history
-                elif msg["value"]["name"] == "process_agent":
-                    # if message is not in history
-                    msg_text = msg["value"]["content"]
-                    msg_text = msg_text.replace("'", '"')
-                    msg_text = re.sub(r'(\w+):', r'"\1":', msg_text)
-                    msg_json = json.loads(msg_text)
-                    chat_msg = [{'sender': 'agent', 'text': msg_json["task"],'type':'string'}]
-                    #if chat_msg  is not added to history
-                    if chat_msg[0] not in history:
-                        history = chat_msg + history
-                    
-        return history
-        # clear messages.json
-        
+    return history, ""
 
-    return history
+
 
 
 @app.callback(
