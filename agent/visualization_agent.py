@@ -23,14 +23,14 @@ def create_visualization_agent(llm, members):
        - Generate the requested plot using Matplotlib.
        - Save the figure to a PNG file:
          ```python
-         fig.savefig("visualization_1.png", bbox_inches="tight")
+         fig.savefig("visualization_{{topic}}.png", bbox_inches="tight")
          ```
        - Return JSON:
          ```json
          {{
            "visualizations": [
              {{
-               "file": "visualization_1.png",
+               "file": "visualization_{{topic}}.png",
                "description": "Description of how this plot addresses the request"
              }}
            ]
@@ -52,12 +52,12 @@ def create_visualization_agent(llm, members):
          a. Create the recommended plot using Matplotlib.
          b. Save the figure:
             ```python
-            fig.savefig(f"visualization_{{i}}.png", bbox_inches="tight")
+            fig.savefig(f"visualization_{{topic}}.png", bbox_inches="tight")
             ```
          c. Prepare an entry:
             ```json
             {{
-              "file": f"visualization_{{i}}.png",
+              "file": f"visualization_{{topic}}.png",
               "description": "<explanation of how this image illustrates the insight>"
             }}
             ```
@@ -65,8 +65,8 @@ def create_visualization_agent(llm, members):
          ```json
          {{
            "visualizations": [
-             {{ "file": "visualization_1.png", "description": "<…>" }},
-             {{ "file": "visualization_2.png", "description": "<…>" }},
+             {{ "file": "visualization_{{topic}}.png", "description": "<…>" }},
+             {{ "file": "visualization_{{topic}}.png", "description": "<…>" }},
              …
            ]
          }}

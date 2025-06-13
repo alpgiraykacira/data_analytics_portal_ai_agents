@@ -14,7 +14,7 @@ def create_api_agent(llm, members):
         3. For multiple API calls, execute them in sequence and combine the results appropriately.
         4. For multiple API calls, if a parameter comes from the previous API call, use its value.
         5. Handle any API errors gracefully and retry with adjusted parameters if necessary.
-        6. ONLY return the response data from the API call(s). Do not include any additional text or explanation.
+        6. ALWAYS return data in the exact standardized format specified below.
 
         **Constraints:**
         - Only use the provided call_transparency_api tool.
@@ -22,17 +22,33 @@ def create_api_agent(llm, members):
         - All date/time values must follow ISO 8601 with timezone offset, e.g., "2023-01-01T00:00:00+03:00".
         - If the API request fails, try again until it succeeds.
         - Check the response data for relevance and completeness.
-        - Do not change or process the response data.
-        - Return data in clean, structured JSON.
+        - Do not change or process the response data - return it exactly as received from API.
+        - CRITICAL: Always return data in the exact format below, nothing else.
 
-        **Output Format:**
+        **MANDATORY Output Format - Return EXACTLY this structure:**
         ```
-        compact_json: {{<unchanged_response_data_from_API>}},
+        compact_json:{{"items":[...all_api_response_items_combined...]}}
         ```
-        **Example:**
-        ```
-        compact_json: {{"items":[{{"date":"2025-03-10T00:00:00+03:00","hour":"00:00","total":34152.78,"naturalGas":9924.12,...}}]}}
-        ```
+
+        **Rules for combining multiple API responses:**
+        - If calling multiple endpoints, merge all "items" arrays into one single "items" array
+        - Preserve all original item properties exactly as returned from API
+        - Do not modify, filter, or transform any data
+        - If an API call returns empty items, include the empty array in the merge
+        - Always ensure the final output has the "items" key containing an array
+
+        **Example for single API call:**
+        If API returns: {{"items":[{{"date":"2025-03-10","value":123}}],"page":null}}
+        Return: compact_json:{{"items":[{{"date":"2025-03-10","value":123}}]}}
+
+        **Example for multiple API calls:**
+        If API call 1 returns: {{"items":[{{"date":"2025-01-01","value":100}}]}}
+        If API call 2 returns: {{"items":[{{"date":"2025-02-01","value":200}}]}}
+        Return: compact_json:{{"items":[{{"date":"2025-01-01","value":100}},{{"date":"2025-02-01","value":200}}]}}
+
+        **Example for empty results:**
+        If API returns: {{"items":[],"page":null}}
+        Return: compact_json:{{"items":[]}}
         """
     return create_agent(
         llm,
