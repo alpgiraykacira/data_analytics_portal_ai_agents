@@ -408,7 +408,7 @@ app.layout = html.Div([
                 
                 dcc.Textarea(
                     id='query-input',
-                    placeholder='Enter your query in Turkish or English...\n\nExamples:\n• "2024 yılı Ankara elektrik tüketimi"\n• "İstanbul planned power outages last month"\n• "Market clearing prices for January 2024"',
+                    placeholder='Enter your query..."',
                     style=styles['textarea']
                 ),
                 
