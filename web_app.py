@@ -25,6 +25,8 @@ import dotenv
 
 dotenv.load_dotenv()
 
+os.environ['LOG_LEVEL'] = 'WARNING'
+
 # Prevent multiple initializations in development
 if os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or not os.environ.get('FLASK_ENV') == 'development':
     # Only initialize once
@@ -96,7 +98,7 @@ class DataAnalyticsPortalWeb:
     """Web interface wrapper for the DataAnalyticsPortal"""
     
     def __init__(self):
-        self.logger = setup_logger()
+        self.logger = setup_logger("logs/web_app.log")
         self.llm = LLM()
         self.workflow = Workflow(llms=self.llm.get_models())
         self.db = QueryDatabase()

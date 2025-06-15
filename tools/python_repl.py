@@ -4,7 +4,7 @@ from langchain.tools import tool
 from langchain_experimental.utilities import PythonREPL
 
 # Set up a logger
-logger = setup_logger()
+logger = setup_logger("logs/python_repl.log")
 # Initialize REPL with pre-imported libraries
 repl = PythonREPL()
 # Seed common libraries into the REPL namespace

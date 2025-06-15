@@ -2,11 +2,11 @@ import requests
 import dotenv
 import os
 from langchain.tools import tool
-from logger import setup_logger
+from logger import setup_logger, LogLevelContext
 from typing import Dict, Annotated
 import json
 
-logger = setup_logger()
+logger = setup_logger("logs/epias_api.log")
 
 dotenv.load_dotenv()
 
@@ -44,7 +44,9 @@ def call_transparency_api(
         "TGT": tgt
     }
     try:
-        logger.info(f"Calling EPIAS API: {method} {url} with body={body}")
+        with LogLevelContext(logger, "DEBUG"):
+            logger.debug(f"API call: {method} {endpoint}")
+        logger.info(f"API call to {endpoint} - {len(str(body))} bytes")
         response = requests.request(method, url, headers=headers, json=body)
         response.raise_for_status()
         data = response.json()

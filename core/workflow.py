@@ -11,6 +11,7 @@ from agent.analysis_agent import create_analysis_agent
 from agent.visualization_agent import create_visualization_agent
 from agent.report_agent import create_report_agent
 from IPython.display import Image, display
+from logger import log_performance
 
 class Workflow:
     def __init__(self, llms):
@@ -63,6 +64,7 @@ class Workflow:
 
         return agents
 
+    @log_performance
     def setup_workflow(self):
         """Set up the workflow graph"""
         self.workflow = StateGraph(State)

@@ -7,7 +7,7 @@ from langchain.tools import tool
 import os
 from logger import setup_logger
 
-logger = setup_logger()
+logger = setup_logger("logs/agent.log")
 
 def create_agent(
         llm: ChatOpenAI,

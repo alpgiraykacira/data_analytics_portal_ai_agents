@@ -15,11 +15,11 @@ class LLM:
     def initialize_llms(self):
         """Initialize language models"""
         try:
-            self.llm_fast = ChatOpenAI(model="gpt-4.1-nano-2025-04-14", temperature=0, max_tokens=4096)
-            self.llm_reasoning = ChatOpenAI(model="o4-mini-2025-04-16", max_tokens=4096)
-            self.llm_low = ChatOpenAI(model="gpt-4o-mini", temperature=0, max_tokens=4096)
-            self.llm_mid = ChatOpenAI(model="gpt-4.1-mini", temperature=0, max_tokens=4096)
-            self.llm_high = ChatOpenAI(model="gpt-4.1", temperature=0.5, max_tokens=4096)
+            self.llm_fast = ChatOpenAI(model="gpt-4.1-nano-2025-04-14", temperature=0, max_completion_tokens=4096)
+            self.llm_reasoning = ChatOpenAI(model="o4-mini-2025-04-16", max_completion_tokens=4096)
+            self.llm_low = ChatOpenAI(model="gpt-4o-mini", temperature=0, max_completion_tokens=4096)
+            self.llm_mid = ChatOpenAI(model="gpt-4.1-mini", temperature=0, max_completion_tokens=4096)
+            self.llm_high = ChatOpenAI(model="gpt-4.1", temperature=0.5, max_completion_tokens=4096)
             self.logger.info("Language models initialized successfully.")
         except Exception as e:
             self.logger.error(f"Error initializing language models: {str(e)}")

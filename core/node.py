@@ -1,12 +1,12 @@
 from langchain_core.messages import AIMessage
 from core.state import State
-from logger import setup_logger
+from logger import setup_logger, log_performance
 from langchain.agents import AgentExecutor
 from typing import Dict, Any
 import re
 import json
 
-logger = setup_logger()
+logger = setup_logger("logs/node.log")
 
 def clean_agent_string(s: str) -> str:
     # 1) Kod bloğu işaretlerini kaldırın (```), eğer varsa
@@ -34,7 +34,7 @@ def manage_state_size(
 
     return state
 
-
+@log_performance
 def agent_node(state: State, agent: AgentExecutor, name: str) -> State:
     """
     Process an agent's action and update the state accordingly.
