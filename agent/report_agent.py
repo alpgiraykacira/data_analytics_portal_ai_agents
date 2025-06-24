@@ -15,6 +15,7 @@ def create_report_agent(llm, members):
     **Constraints:**
     - DO NOT use read_file tool. It is only for tool assignment.
     - DO NOT include response data in the report.
+    - Respond in same langugage as the input query.
 
     **Output Format:**
     {{

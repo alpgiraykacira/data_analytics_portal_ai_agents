@@ -20,10 +20,10 @@ def create_process_agent(llm):
     **Completion Criteria:**
     Respond with "FINISH" only when:
     1. Workflow is "get data - return data".
-    2. Workflow is "get data - return visualization - report report" and visualization agent created plots and 
-        report agent created a report that explains data and visualizations.
-    3. Workflow is "get data - analyze data - return visualization - return report" and analysis agent analyzed data, 
-        created insights and recommendations and visualization agent created plots and report agent created an 
+    2. Workflow is "get data - return visualization - report report" and visualization agent creates plots and 
+        report agent creates a report that explains data and visualizations.
+    3. Workflow is "get data - analyze data - return visualization - return report" and analysis agent analyzes data, 
+        created insights and recommendations, via recommendations visualization agent creates plots and report agent creates an 
         analysis report.
     """
 

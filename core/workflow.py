@@ -32,8 +32,6 @@ class Workflow:
     def create_agents(self):
         """Create all system agents"""
         # Get language models
-        llm_fast = self.llms["llm_fast"]
-        llm_reasoning = self.llms["llm_reasoning"]
         llm_low = self.llms["llm_low"]
         llm_mid = self.llms["llm_mid"]
         llm_high = self.llms["llm_high"]
@@ -41,18 +39,18 @@ class Workflow:
         # Create agent dictionary
         agents = {
             "query_agent": create_query_agent(
-                llm_mid,
+                llm_high,
                 self.members,
         ),  "retrieval_agent": create_retrieval_agent(
-                llm_mid,
+                llm_high,
                 self.members,
         ),  "api_agent": create_api_agent(
-                llm_low,
+                llm_high,
                 self.members,
         ),  "process_agent": create_process_agent(
                 llm_high
         ),  "analysis_agent": create_analysis_agent(
-                llm_mid,
+                llm_high,
                 self.members,
         ),  "visualization_agent": create_visualization_agent(
                 llm_high,
