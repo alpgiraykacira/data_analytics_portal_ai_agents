@@ -39,10 +39,10 @@ class Workflow:
         # Create agent dictionary
         agents = {
             "query_agent": create_query_agent(
-                llm_high,
+                llm_mid,
                 self.members,
         ),  "retrieval_agent": create_retrieval_agent(
-                llm_high,
+                llm_mid,
                 self.members,
         ),  "api_agent": create_api_agent(
                 llm_high,
@@ -56,7 +56,7 @@ class Workflow:
                 llm_high,
                 self.members,
         ),  "report_agent": create_report_agent(
-                llm_low,
+                llm_high,
                 self.members,
         )}
 

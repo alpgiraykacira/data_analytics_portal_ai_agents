@@ -33,6 +33,7 @@ def call_transparency_api(
     """
     Calls the EPIAS Transparency API and returns the JSON response
     as a compact string (no spaces, no unnecessary escapes).
+    method, service, endpoint, and body are required parameters.
     """
     tgt = get_token(username, password)
     host = "https://seffaflik.epias.com.tr"
